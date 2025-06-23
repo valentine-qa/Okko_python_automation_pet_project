@@ -73,7 +73,10 @@ def test_demoqa(browser_params): #в скобках указываем фикс�
 
 
 
-
+# pyhon -m venv .venv
+# sourse .venv/bin/activate
+# pip install -r requirements.txt
+# pytest tests/ui
 
 
 
