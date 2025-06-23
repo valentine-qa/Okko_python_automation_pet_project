@@ -1,11 +1,28 @@
+import allure
+import pytest
+from allure_commons.types import Severity
 from selene import browser, be, have
 
 
+@pytest.mark.positive
+@allure.tag('UI')
+@allure.feature('UI')
+@allure.story('User Registration')
+@allure.title('Register with valid email')
+@allure.severity(Severity.CRITICAL)
+@allure.link('https://okko.tv/', name='Онлайн-кинотеатр OKKO')
 def test_come_to_main_menu_by_logo_click():
     browser.open('https://okko.tv/catalog')
     browser.element('a[aria-label="Главная страница"]').click()
     browser.element('[test-id="home_page"]').should(be.visible)
 
+@pytest.mark.positive
+@allure.tag('UI')
+@allure.feature('UI')
+@allure.story('User Registration')
+@allure.title('Register with valid email')
+@allure.severity(Severity.CRITICAL)
+@allure.link('https://okko.tv/', name='Онлайн-кинотеатр OKKO')
 def test_see_film_without_subscribe():
     browser.open('https://okko.tv/')
     browser.all('[test-id="search_collection_element"]').first.click()
@@ -13,7 +30,13 @@ def test_see_film_without_subscribe():
     browser.element('.RdGM53zT').should(have.text('Вход или регистрация'))
     browser.element('[test-id="sign_input"]').should(be.visible)
 
-
+@pytest.mark.positive
+@allure.tag('UI')
+@allure.feature('UI')
+@allure.story('User Registration')
+@allure.title('Register with valid email')
+@allure.severity(Severity.CRITICAL)
+@allure.link('https://okko.tv/', name='Онлайн-кинотеатр OKKO')
 def test_film_price_is_visible():
     browser.open('https://okko.tv/store')
     cards = browser.all('[test-id="search_collection_element"]')
