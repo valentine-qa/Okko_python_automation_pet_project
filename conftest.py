@@ -33,7 +33,6 @@ def setup_browser(request):
         command_executor=f"https://user1:1234@selenoid.autotests.cloud/wd/hub",
         options=options
     )
-
     browser = Browser(Config(driver))
     yield browser
 
