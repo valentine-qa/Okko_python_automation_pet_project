@@ -31,7 +31,7 @@ class LoginPage:
 
     @allure.step("Checking for login success")
     def check_registration_success(self, test_email):
-        self.login_window.should.should(have.text('Введите код из письма')).should(have.text(f'Мы отправили письмо на {test_email}'))
+        self.login_window.should(have.text('Введите код из письма')).should(have.text(f'Мы отправили письмо на {test_email}'))
 
 
 login_page = LoginPage()

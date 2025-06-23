@@ -13,6 +13,9 @@ class MainPage:
         self.first_film = browser.all('[test-id="card_rail_item"]').first
         self.actors_tab = browser.element('[test-id="meta_actors"]')
         self.director_tab = browser.element('[test-id="meta_director"]')
+        self.okko_logo = browser.element('a[aria-label="Главная страница"]')
+        self.home_page = browser.element('[test-id="home_page"]')
+
 
     @allure.step('Open website')
     def open(self):
