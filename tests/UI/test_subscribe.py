@@ -32,10 +32,6 @@ def test_see_film_with_subscribe():
 @allure.link('https://okko.tv/', name='Онлайн-кинотеатр OKKO')
 def test_film_price_is_visible():
 
-    # browser.open('https://okko.tv/store')
-    # cards = browser.all('[test-id="search_collection_element"]')
-    # for card in cards:
-    #     card.element('.__26ii8ap5').should(have.text('ОТ')).should(have.text('руб'))
 
     main_page.open()
 

@@ -14,7 +14,7 @@ class LoginPage:
 
     @allure.step("Open a login form")
     def open_login_form(self):
-        with allure.step('Open a website'):
+        with allure.step('Open main page'):
             browser.open('/')
         with allure.step('Click by login button'):
             self.login_button.click()

@@ -31,19 +31,24 @@ class Subscribe:
 
     @allure.step('Check that login form is open')
     def check_login_form_open(self):
-        self.login_tab_header.should(be.visible).should(have.text('ВХОД ИЛИ РЕГИСТРАЦИЯ'))
-        login_page.login_input_field.should(be.visible)
+        with allure.step('Check header'):
+            self.login_tab_header.should(be.visible).should(have.text('ВХОД ИЛИ РЕГИСТРАЦИЯ'))
+        with allure.step('Check input field'):
+            login_page.login_input_field.should(be.visible)
 
     @allure.step('Get list with all films')
     def get_film_cards(self):
-        browser.open('/store')
-        cards = browser.all('[test-id="search_collection_element"]')
+        with allure.step('Open store'):
+            browser.open('/store')
+        with allure.step('Get all cards'):
+            cards = browser.all('[test-id="search_collection_element"]')
         return cards
 
     @allure.step('Check that card_windows has prices')
     def check_prices_windows(self, cards):
-        for card in cards:
-            card.element('.__26ii8ap5').should(have.text('ОТ')).should(have.text('руб'))
+        with allure.step('Check every card'):
+            for card in cards:
+                card.element('.__26ii8ap5').should(have.text('ОТ')).should(have.text('руб'))
 
 
 
