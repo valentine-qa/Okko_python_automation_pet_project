@@ -17,8 +17,8 @@ from selene.support import webdriver
 #     time.sleep(3)
 #     browser.quit()
 
-@pytest.fixture(scope='function')
-def setup_browser(request):
+@pytest.fixture(scope='function', autouse=True)
+def setup_browser():
     options = Options()
     capabilities = {
         "browserName": "chrome",
@@ -28,13 +28,24 @@ def setup_browser(request):
             "enableVideo": True
         }
     }
-    options.capabilities.update(capabilities)
+
+    options.set_capability("browserName", capabilities["browserName"])
+    options.set_capability("browserVersion", capabilities["browserVersion"])
+    options.set_capability("selenoid:options", capabilities["selenoid:options"])
+
     driver = webdriver.Remote(
-        command_executor=f"https://user1:1234@selenoid.autotests.cloud/wd/hub",
+        command_executor="https://user1:1234@selenoid.autotests.cloud/wd/hub",
         options=options
     )
-    browser = Browser(Config(driver=lambda: driver))
-    yield browser
+
+    # Подменяем глобальный браузер
+    browser.config.driver = driver
+    browser.config.base_url = "https://okko.tv"
+    browser.config.timeout = 10
+
+    yield
+
+    browser.quit()
 
     # attach.add_screenshot(browser)
     # attach.add_logs(browser)
