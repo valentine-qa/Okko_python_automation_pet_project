@@ -1,9 +1,9 @@
 import time
 
 import pytest
-from selene import browser, Browser, Config
-from selene.support import webdriver
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selene import Browser, Config, browser
 
 
 # @pytest.fixture(scope='function', autouse=True)
