@@ -3,10 +3,13 @@ from time import sleep
 import allure
 from selene import browser, have, by, be
 
+from tests.UI.conftest import setup_browser
+
 
 class LoginPage:
 
     def __init__(self):
+        self.browser = browser
         self.login_button = browser.element('[test-id="nav_sign"]')
         self.login_input_field = browser.element('[test-id="sign_input"]')
         self.confirm_button = browser.element('[test-id="continue_btn"]')
@@ -34,5 +37,5 @@ class LoginPage:
         self.login_window.should(have.text('Введите код из письма')).should(have.text(f'Мы отправили письмо на {test_email}'))
 
 
-login_page = LoginPage()
+login_page = LoginPage(setup_browser())
 

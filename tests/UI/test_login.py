@@ -16,7 +16,7 @@ from okko_python_automation_pet_project.pages.web.login_page import login_page
 @allure.title('Login with invalid email')
 @allure.severity(Severity.CRITICAL)
 @allure.link('https://okko.tv/', name='Онлайн-кинотеатр OKKO')
-def test_invalid_login():
+def test_invalid_login(setup_browser):
     invalid_email = '@@@!@312'
 
     login_page.open_login_form()
