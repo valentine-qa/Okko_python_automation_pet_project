@@ -1,7 +1,6 @@
 import allure
 import pytest
 from allure_commons.types import Severity
-from selene import browser, by, be, have
 from okko_python_automation_pet_project.pages.web.login_page import login_page
 
 
@@ -33,7 +32,8 @@ def test_invalid_login():
 @allure.title('Login with valid email')
 @allure.severity(Severity.CRITICAL)
 @allure.link('https://okko.tv/', name='Онлайн-кинотеатр OKKO')
-def test_valid_login():
+def test_valid_login(setup_browser):
+    browser = setup_browser
     valid_email = 'valentineQA@gmail.com'
 
     login_page.open_login_form()

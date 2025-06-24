@@ -1,57 +1,53 @@
-import time
-
 import pytest
+import allure
+from selene.support.shared import browser
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selene import Browser, Config, browser
+from selenium.webdriver import ChromeOptions, FirefoxOptions
+
+from okko_python_automation_pet_project.utils import attach
+
+
+def pytest_addoption(parser):
+    parser.addoption('--browser_name', action='store', default='chrome', help='Select browser: Chrome or Firefox')
 
 
 @pytest.fixture(scope='function', autouse=True)
-def browser_config():
-    browser.config.driver_name = 'chrome'
-    browser.config.window_width = '1800'
-    browser.config.window_height = '1000'
-    browser.config.base_url = 'https://okko.tv'
+def manage_browser(request):
+    browser_name = request.config.getoption('--browser_name')
+    options = ChromeOptions() if browser_name.lower() == 'chrome' else FirefoxOptions()
+
+    driver_class = webdriver.Chrome if browser_name.lower() == 'chrome' else webdriver.Firefox
+    browser.config.driver = driver_class(options=options)
+    browser.config.base_url = "https://okko.tv"
+    browser.config.window_width = 1920
+    browser.config.window_height = 1080
+
     yield
 
-    time.sleep(3)
+    report = request.node.rep_call
+
+    if report.failed:
+        with allure.step('Add screenshot'):
+            attach.add_screenshot(browser)
+
+    with allure.step('Add browser logs'):
+        if browser_name == 'chrome':
+            attach.add_logs(browser)
+
+    with allure.step('Add HTML'):
+        attach.add_html(browser)
+
     browser.quit()
 
-# @pytest.fixture(scope='function', autouse=True)
-# def setup_browser():
-#     options = Options()
-#     capabilities = {
-#         "browserName": "chrome",
-#         "browserVersion": "127.0",
-#         "selenoid:options": {
-#             "enableVNC": True,
-#             "enableVideo": True
-#         }
-#     }
-#
-#     options.set_capability("browserName", capabilities["browserName"])
-#     options.set_capability("browserVersion", capabilities["browserVersion"])
-#     options.set_capability("selenoid:options", capabilities["selenoid:options"])
-#
-#     driver = webdriver.Remote(
-#         command_executor="https://user1:1234@selenoid.autotests.cloud/wd/hub",
-#         options=options
-#     )
-#
-#     # Подменяем глобальный браузер
-#     browser.config.driver = driver
-#     browser.config.base_url = "https://okko.tv"
-#     browser.config.timeout = 10
-#
-#     yield
-#
-#     try:
-#         if driver.session_id:
-#             driver.quit()
-#     except Exception as e:
-#         print(f"Driver quit error: {e}")
-#
-#     # attach.add_screenshot(browser)
-#     # attach.add_logs(browser)
-#     # attach.add_html(browser)
-#     # attach.add_video(browser)
+
+# @pytest.fixture
+# def generate_email():
+#     fake = Faker()
+#     return fake.email()
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+    setattr(item, 'rep_' + report.when, report)
