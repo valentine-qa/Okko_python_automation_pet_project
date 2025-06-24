@@ -1,53 +1,63 @@
+# import time
+#
+# import pytest
+# from selenium import webdriver
+# from selenium.webdriver.chrome.options import Options
+# from selene import Browser, Config, browser
+#
+#
+# @pytest.fixture(scope='function', autouse=True)
+# def browser_config():
+#     browser.config.driver_name = 'chrome'
+#     browser.config.window_width = '1800'
+#     browser.config.window_height = '1000'
+#     browser.config.base_url = 'https://okko.tv'
+#     yield
+#
+#     time.sleep(3)
+#     browser.quit()
+
 import pytest
-import allure
-from selene.support.shared import browser
+
+
 from selenium import webdriver
-from selenium.webdriver import ChromeOptions, FirefoxOptions
+from selenium.webdriver.chrome.options import Options
+from selene import Browser, Config
 
 from okko_python_automation_pet_project.utils import attach
 
 
 def pytest_addoption(parser):
-    parser.addoption('--browser_name', action='store', default='chrome', help='Select browser: Chrome or Firefox')
+    parser.addoption(
+        '--browser_version',
+        default="127.0"
+    )
 
 
 @pytest.fixture(scope='function', autouse=True)
-def manage_browser(request):
-    browser_name = request.config.getoption('--browser_name')
-    options = ChromeOptions() if browser_name.lower() == 'chrome' else FirefoxOptions()
+def setup_browser(request):
 
-    driver_class = webdriver.Chrome if browser_name.lower() == 'chrome' else webdriver.Firefox
-    browser.config.driver = driver_class(options=options)
-    browser.config.base_url = "https://okko.tv"
-    browser.config.window_width = 1920
-    browser.config.window_height = 1080
+    browser_version = request.config.getoption('--browser_version')
+    options = Options()
+    selenoid_capabilities = {
+        "browserName": "chrome",
+        "browserVersion": browser_version,
+        "selenoid:options": {
+            "enableVNC": True,
+            "enableVideo": True
+        }
+    }
+    options.capabilities.update(selenoid_capabilities)
+    driver = webdriver.Remote(
+        command_executor=f"https://user1:1234@selenoid.autotests.cloud/wd/hub",
+        options=options
+    )
 
-    yield
+    browser = Browser(Config(driver=lambda: driver))
 
-    report = request.node.rep_call
+    yield browser
 
-    if report.failed:
-        with allure.step('Add screenshot'):
-            attach.add_screenshot(browser)
-
-    with allure.step('Add browser logs'):
-        if browser_name == 'chrome':
-            attach.add_logs(browser)
-
-    with allure.step('Add HTML'):
-        attach.add_html(browser)
-
-    browser.quit()
-
-
-# @pytest.fixture
-# def generate_email():
-#     fake = Faker()
-#     return fake.email()
-
-
-@pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    outcome = yield
-    report = outcome.get_result()
-    setattr(item, 'rep_' + report.when, report)
+    attach.add_screenshot(browser)
+    attach.add_html(browser)
+    attach.add_html(browser)
+    attach.add_video(browser)
