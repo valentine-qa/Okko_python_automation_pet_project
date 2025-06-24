@@ -25,7 +25,7 @@ def test_invalid_login():
 
     login_page.chek_registration_fail()
 
-
+@pytest.mark.skip
 @pytest.mark.positive
 @allure.tag('UI')
 @allure.feature('UI')

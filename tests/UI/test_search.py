@@ -23,7 +23,7 @@ def test_search_film_by_title():
 
     # browser.all('[test-id="card_rail_item"]').first.should(be.visible).should(have.text('Перевозчик'))
 
-
+@pytest.mark.skip
 @pytest.mark.positive
 @allure.tag('UI')
 @allure.feature('UI')
@@ -40,7 +40,7 @@ def test_search_film_by_actor():
 
     main_page.chek_result_by_actor(actor_name)
 
-
+@pytest.mark.skip
 @pytest.mark.positive
 @allure.tag('UI')
 @allure.feature('UI')

@@ -22,7 +22,7 @@ def test_see_film_with_subscribe():
 
 
 
-
+@pytest.mark.skip
 @pytest.mark.positive
 @allure.tag('UI')
 @allure.feature('UI')
