@@ -45,11 +45,13 @@ def setup_browser():
 
     yield
 
-    browser.quit()
+    try:
+        if driver.session_id:
+            driver.quit()
+    except Exception as e:
+        print(f"Driver quit error: {e}")
 
     # attach.add_screenshot(browser)
     # attach.add_logs(browser)
     # attach.add_html(browser)
     # attach.add_video(browser)
-
-    browser.quit()
