@@ -2,7 +2,7 @@ from time import sleep
 
 import allure
 from selene import browser, have, by, be
-
+from selene.support.shared import config
 
 
 class LoginPage:
@@ -16,9 +16,10 @@ class LoginPage:
     @allure.step("Open a login form")
     def open_login_form(self):
         with allure.step('Open main page'):
+            config.timeout = 10
             browser.open('/')
         with allure.step('Click by login button'):
-            self.login_button.click()
+            self.login_button.should(be.visible).click()
 
     @allure.step("Input email")
     def input_mail(self, test_email):

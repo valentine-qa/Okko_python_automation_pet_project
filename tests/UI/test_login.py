@@ -22,9 +22,9 @@ def test_invalid_login():
 
     login_page.input_mail(invalid_email)
 
-    login_page.chek_registration_fail()
+    login_page.check_registration_fail()
 
-@pytest.mark.skip
+# @pytest.mark.skip
 @pytest.mark.positive
 @allure.tag('UI')
 @allure.feature('UI')
@@ -32,8 +32,8 @@ def test_invalid_login():
 @allure.title('Login with valid email')
 @allure.severity(Severity.CRITICAL)
 @allure.link('https://okko.tv/', name='Онлайн-кинотеатр OKKO')
-def test_valid_login(setup_browser):
-    browser = setup_browser
+def test_valid_login():
+
     valid_email = 'valentineQA@gmail.com'
 
     login_page.open_login_form()
