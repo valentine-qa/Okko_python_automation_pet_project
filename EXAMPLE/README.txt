@@ -1,0 +1,1 @@
+РАБОЧАЯ ВЕРСИЯ НА JENKINS + SELEMOID
